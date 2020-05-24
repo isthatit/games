@@ -6,77 +6,56 @@
   <body>
     <div id="content"></div>
     <script>
+      const log = (...e) => console.log(e);
       const init = () => {
         // 7, jqk, a, 2
-        const spade = [
-          "a",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "j",
-          "q",
-          "k",
-        ];
-        const heart = [
-          "a",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "j",
-          "q",
-          "k",
-        ];
-        const clover = [
-          "a",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "j",
-          "q",
-          "k",
-        ];
-        const diamond = [
-          "a",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "j",
-          "q",
-          "k",
-        ];
+        // a 3, 2 2
+        // 7 change
+        // j jump
+        // q reverse
+        // k one more thing..
+
+        const spade = ["sa", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "sj", "sq", "sk" ];
+        const heart = ["ha", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "hj", "hq", "hk" ];
+        const clover = ["ca", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "cj", "cq", "ck" ];
+        const diamond = ["da", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9", "d10", "dj", "dq", "dk" ];
+        // black 10, color 15
         const joker = ["black", "color"];
 
-        console.log(
-          spade.length +
-            heart.length +
-            clover.length +
-            diamond.length +
-            joker.length
-        );
+        // total : 54
+
+        let all = spade.concat(heart).concat(clover).concat(diamond).concat(joker);
+
+       
+        let mixed = [];
+        let cardLen = 53;
+        log('hello','nice')
+        for(var i=0; i< 54; i++){
+          const randomNumber = Math.round(Math.random() * cardLen);
+          const item = all[randomNumber];
+          
+          mixed.push(item)
+          all.splice(randomNumber, 1);
+          cardLen--;
+        }
+        log(mixed)
+        let player1 = []
+        let player2 = [];
+        let flag = true;
+        for(var i=0; i < 16; i++){
+          if(flag){
+            player1.push(mixed.pop());
+          }else{
+            player2.push(mixed.pop());
+          }
+          flag = !flag;
+
+        }
+        
+        log(player1)
+        log(player2)
+
+
       };
 
       init();
