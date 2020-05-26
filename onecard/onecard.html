@@ -4,9 +4,47 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <div id="content"></div>
+    <div id="content">
+      <div id="player1"></div>
+      <div id="center"></div>
+      <div id="player2"></div>
+    </div>
     <script>
       const log = (...e) => console.log(e);
+
+
+      const getPlyaersCardHtml = (playerNumber, plyaersCardArr) => {
+          let cardHTML = '';
+          log(playerNumber)
+          let key = ''
+          for(var i of plyaersCardArr){
+
+          
+          switch(i[0]){
+            
+            case 's':
+              cardHTML+= `<span onclick=handInCard(this) data-player-number=${playerNumber} data-card=${i}>♠︎${i.slice(1)}</span>`
+              break;
+            case 'h':
+              cardHTML+= `<span onclick=handInCard(this) data-player-number=${playerNumber} data-card=${i}>♥︎${i.slice(1)}</span>`
+              break;
+            case 'c':
+              cardHTML+= `<span onclick=handInCard(this) data-player-number=${playerNumber} data-card=${i}>♣︎${i.slice(1)}</span>`
+              break;
+            case 'd':
+              cardHTML+= `<span onclick=handInCard(this) data-player-number=${playerNumber} data-card=${i}>♦︎${i.slice(1)}</span>`
+              break;
+            case 'j':
+              cardHTML+= `<span onclick=handInCard(this) data-player-number=${playerNumber} data-card=${i}>⚗︎${i.slice(1)}</span>`
+              break;
+          }
+
+        }
+        return cardHTML;
+        }
+
+
+
       const init = () => {
         // 7, jqk, a, 2
         // a 3, 2 2
@@ -20,17 +58,17 @@
         const clover = ["ca", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "cj", "cq", "ck" ];
         const diamond = ["da", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "d9", "d10", "dj", "dq", "dk" ];
         // black 10, color 15
-        const joker = ["black", "color"];
+        const joker = ["jb", "jc"];
 
         // total : 54
+        // 108
 
         let all = spade.concat(heart).concat(clover).concat(diamond).concat(joker);
 
-       
+        all = all.concat(all);
         let mixed = [];
-        let cardLen = 53;
-        log('hello','nice')
-        for(var i=0; i< 54; i++){
+        let cardLen = 107;
+        for(var i=0; i< 108; i++){
           const randomNumber = Math.round(Math.random() * cardLen);
           const item = all[randomNumber];
           
@@ -38,27 +76,72 @@
           all.splice(randomNumber, 1);
           cardLen--;
         }
-        log(mixed)
-        let player1 = []
-        let player2 = [];
+
+        let player1Arr = []
+        let player2Arr = [];
         let flag = true;
-        for(var i=0; i < 16; i++){
+        for(var i=0; i < 32; i++){
           if(flag){
-            player1.push(mixed.pop());
+            player1Arr.push(mixed.pop());
           }else{
-            player2.push(mixed.pop());
+            player2Arr.push(mixed.pop());
           }
           flag = !flag;
 
         }
+
+
         
-        log(player1)
-        log(player2)
+        
+        // shcdj ♠︎♥︎♣︎♦︎⚗︎
 
+        const centerCard = mixed.pop();
+        const centerCardHTML = `<span id="centerCard" data-center-card=${centerCard}>${centerCard} </span>`
 
+        document.getElementById("player1").innerHTML = getPlyaersCardHtml(1, player1Arr);
+        document.getElementById("center").innerHTML = centerCardHTML;
+        document.getElementById("player2").innerHTML = getPlyaersCardHtml(2, player2Arr);
+
+        return {player1Arr, player2Arr, mixed}
       };
 
-      init();
+      
+      function handInCard (target){
+        const playerNumber = target.dataset.playerNumber;
+        const card = target.dataset.card;
+        const centerCard = document.getElementById("centerCard").dataset.centerCard;
+
+        const centerShape = centerCard.substring(0,1);
+        const centerNumber = centerCard.substr(1);
+
+        const playerCardShape = card.substring(0,1);
+        const playerCardNumber = card.substr(1);
+        log(centerShape === playerCardShape || centerNumber === playerCardNumber || playerCardShape === 'j')
+        if(centerShape === playerCardShape || centerNumber === playerCardNumber || playerCardShape === 'j'){
+          log(playerNumber)
+          if(playerNumber == 1){
+            const idx = player1Arr.indexOf(card);
+            player1Arr.splice(idx ,1);
+            
+          }else{
+            log('player2');
+            const idx = player2Arr.indexOf(card);
+            player2Arr.splice(idx ,1);
+          }
+        document.getElementById("player1").innerHTML = getPlyaersCardHtml(1, player1Arr);
+        const centerCardHTML = `<span id="centerCard" data-center-card=${card}>${card} </span>`
+        document.getElementById("center").innerHTML = centerCardHTML;
+
+        document.getElementById("player2").innerHTML = getPlyaersCardHtml(2, player2Arr);
+
+        }
+
+
+        let {player1Arr, player2Arr, mixed} = init();
+
+        
+      }
+
     </script>
   </body>
 </html>
