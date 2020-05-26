@@ -44,7 +44,6 @@
         }
 
 
-
       const init = () => {
         // 7, jqk, a, 2
         // a 3, 2 2
@@ -90,9 +89,6 @@
 
         }
 
-
-        
-        
         // shcdj ♠︎♥︎♣︎♦︎⚗︎
 
         const centerCard = mixed.pop();
@@ -105,6 +101,7 @@
         return {player1Arr, player2Arr, mixed}
       };
 
+     
       
       function handInCard (target){
         const playerNumber = target.dataset.playerNumber;
@@ -135,12 +132,10 @@
         document.getElementById("player2").innerHTML = getPlyaersCardHtml(2, player2Arr);
 
         }
-
-
-        let {player1Arr, player2Arr, mixed} = init();
-
-        
       }
+
+      let {player1Arr, player2Arr, mixed} = init();
+
 
     </script>
   </body>
