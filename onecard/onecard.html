@@ -2,6 +2,70 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <style>
+      body {
+        height: 100%;
+      }
+      #content {
+        height: 100%;
+      }
+      #player1 {
+        height: 20%;
+      }
+      #center {
+        height: 60%;
+      }
+      #palyer2 {
+        height: 20%;
+      }
+      .player {
+        position: absolute;
+      }
+      .card {
+        position: absolute;
+        border: 1px solid black;
+        height: 160px;
+        min-width: 90px;
+        max-width: 90px;
+        min-height: 160px;
+        max-height: 160px;
+        border-radius: 0.3rem;
+        left: 2rem;
+        top: 0.15rem;
+        background-color: white;
+        padding: 0.5rem;
+      }
+      .cardHead {
+        height: 20%;
+        margin: auto;
+      }
+      .cardBody {
+        height: 60%;
+        vertical-align: middle;
+        text-align: center;
+        line-height: 5rem;
+      }
+      .cardFooter {
+        height: 20%;
+        margin: auto;
+      }
+      .ordinaryText {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        display: inline-block;
+      }
+      .centerText {
+        font-size: 3rem;
+      }
+      .rotatedText {
+        position: absolute;
+        transform: rotate(180deg);
+        bottom: 0.5rem;
+        right: 0.5rem;
+        display: inline-block;
+      }
+    </style>
   </head>
   <body>
     <div id="content">
@@ -49,16 +113,40 @@
         return result;
       };
 
-      const getPlyaersCardHtml = (playerNumber, plyaersCardArr) => {
+      const getPlayersCardHtml = (playerNumber, playersCardArr) => {
         let cardHTML = "";
         let key = "";
+        let testHTML = "";
+        const lastLength = playersCardArr.length - 1;
+        for (var i = 0; i < playersCardArr.length; i++) {
+          const cardShape = getCardShape(playersCardArr[i]);
 
-        for (var i of plyaersCardArr) {
+          const tempHTML = `<div class='card' onclick='handInCard(this)' data-player-number='${playerNumber}' data-card='${
+            playersCardArr[i]
+          }'><div class='cardHead'><span class='ordinaryText'>${playersCardArr[
+            i
+          ].slice(
+            1
+          )}<br/>${cardShape}</span></div><div class='cardBody'><span class='centerText'>${cardShape}</span></div><div class='cardFooter'><span class='rotatedText'>${playersCardArr[
+            i
+          ].slice(1)}<br/>${cardShape}</span></div>`;
+
+          if (i === 0) {
+            testHTML += tempHTML + "</div>";
+          } else {
+            const tempData = testHTML;
+            testHTML = tempHTML + tempData + "</div>";
+          }
+        }
+
+        for (var i of playersCardArr) {
           cardHTML += `<span onclick=handInCard(this) data-player-number=${playerNumber} data-card=${i}>${getCardShape(
             i
           )}${i.slice(1)} </span>`;
         }
-        return cardHTML;
+
+        // return cardHTML;
+        return testHTML;
       };
 
       const init = () => {
@@ -164,12 +252,12 @@
           flipedCard
         )}${flipedCard.slice(1)} </span>`;
 
-        document.getElementById("player1").innerHTML = getPlyaersCardHtml(
+        document.getElementById("player1").innerHTML = getPlayersCardHtml(
           1,
           player1Arr
         );
         document.getElementById("center").innerHTML = flipedCardHTML;
-        document.getElementById("player2").innerHTML = getPlyaersCardHtml(
+        document.getElementById("player2").innerHTML = getPlayersCardHtml(
           2,
           player2Arr
         );
@@ -205,7 +293,7 @@
             const idx = player2Arr.indexOf(card);
             player2Arr.splice(idx, 1);
           }
-          document.getElementById("player1").innerHTML = getPlyaersCardHtml(
+          document.getElementById("player1").innerHTML = getPlayersCardHtml(
             1,
             player1Arr
           );
@@ -215,7 +303,7 @@
           document.getElementById("center").innerHTML = flipedCardHTML;
           centerArr.push(card);
           log("centerArr:::", centerArr);
-          document.getElementById("player2").innerHTML = getPlyaersCardHtml(
+          document.getElementById("player2").innerHTML = getPlayersCardHtml(
             2,
             player2Arr
           );
